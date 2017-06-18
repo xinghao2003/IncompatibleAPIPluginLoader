@@ -13,10 +13,12 @@ use pocketmine\utils\TextFormat;
 class IncompatibleApiPluginManager extends PluginManager {
 
 	private $server;
+	private $loader;
 
-	public function __construct(Server $server, SimpleCommandMap $commandMap) {
+	public function __construct(Server $server, SimpleCommandMap $commandMap, IncompatibleApiPluginLoader $loader) {
 		parent::__construct($server, $commandMap);
 		$this->server = $server;
+		$this->loader = $loader;
 	}
 
 	public function getServer(): Server {
@@ -62,6 +64,27 @@ class IncompatibleApiPluginManager extends PluginManager {
 								$this->server->getLogger()->warning($this->server->getLanguage()->translateString("pocketmine.plugin.spacesDiscouraged", [$name]));
 							}
 							if(isset($plugins[$name]) or $this->server->getPluginManager()->getPlugin($name) instanceof Plugin){
+								continue;
+							}
+							$compatible = false;
+							foreach($description->getCompatibleApis() as $version){
+								switch($this->loader->getIncompatibleApiLoadingMode()) {
+									case 0: // Load all incompatible plugin APIs EXCEPT ...
+										if(in_array($version, $this->loader->getExceptedPluginAPIs())) {
+											continue;
+										}
+										$compatible = true;
+										break 2;
+									case 1: // Load no incompatible plugin APIs EXCEPT ...
+										if(in_array($version, $this->loader->getExceptedPluginAPIs())) {
+											$compatible = true;
+											break 2;
+										}
+										break;
+								}
+							}
+							if($compatible === false){
+								$this->server->getLogger()->error("Attempted to load the plugin $name, but failed due to an API version disabled in the config.yml");
 								continue;
 							}
 							$plugins[$name] = $file;
