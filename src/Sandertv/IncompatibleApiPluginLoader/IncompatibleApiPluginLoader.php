@@ -12,7 +12,7 @@ class IncompatibleApiPluginLoader extends PluginBase {
 		$val = "true";
 		$opts = getopt("", ["$opt::"]);
 		if(!isset($opts[$opt]) || $opts[$opt] !== $val){
-			$this->getLogger()->critical("Loading incompatible-API plugins will lead to many negative impacts, and this crash is the least negative example of such impacts.");
+			$this->getLogger()->critical("Loading incompatible-API plugins will likely lead to many negative impacts, and this crash is the least negative example of such impacts.");
 			$this->getLogger()->critical("Loading of these plugins could lead to all kinds of consequences, including crashes, data loss and other bugs. By continuing you promise not to complain about any of these issues.");
 			$this->getLogger()->critical("If you are ready to accept such a fate, please run the server with --$opt=\"$val\"");
 			\pocketmine\kill(getmypid());
