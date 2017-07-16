@@ -31,7 +31,7 @@ class IncompatibleApiPluginManager extends PluginManager {
 	 *
 	 * @return Plugin[]
 	 */
-	public function loadPlugins($directory, $newLoaders = null){
+	public function loadPlugins(string $directory, array $newLoaders = null){
 		if(is_dir($directory)){
 			$plugins = [];
 			$loadedPlugins = [];
