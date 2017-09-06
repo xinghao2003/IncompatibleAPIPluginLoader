@@ -9,6 +9,5 @@ Load-API: All
 # The API versions to except from the setting above.
 # If the above is set to 'All': Loads plugins with any incompatible API except the ones below.
 # If it is set to 'None': Loads no plugins with an incompatible API except the ones below.
-Except-APIs:
-- 1.0.0
+Except-APIs: None
 
